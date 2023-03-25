@@ -1,0 +1,149 @@
+
+
+
+/*
+public class Servidor {
+    private static final int PUERTO = 1090;
+
+    public static void main(String[] args) {
+        try (ServerSocket servidor = new ServerSocket(PUERTO)) {
+            System.out.println("Servidor iniciado. Esperando conexiones...");
+
+            while (true) {
+                Socket clienteSocket = servidor.accept();
+                System.out.println("Nuevo cliente conectado: " + clienteSocket.getRemoteSocketAddress());
+
+                ManejadorDeCliente manejadorDeCliente = new ManejadorDeCliente(clienteSocket);
+                manejadorDeCliente.start();
+            }
+
+        } catch (IOException e) {
+            System.err.println("Error al iniciar el servidor: " + e.getMessage());
+        }
+    }
+
+    private static class ManejadorDeCliente extends Thread {
+        private final Socket clienteSocket;
+
+        public ManejadorDeCliente(Socket clienteSocket) {
+            this.clienteSocket = clienteSocket;
+        }
+
+        @Override
+        public void run() {
+            try (DataInputStream entrada = new DataInputStream(clienteSocket.getInputStream())) {
+                while (true) {
+                    String comando = entrada.readUTF();
+                    System.out.println("Comando recibido del cliente " + clienteSocket.getRemoteSocketAddress() + ": " + comando);
+                }
+            } catch (IOException e) {
+                System.out.println("El cliente " + clienteSocket.getRemoteSocketAddress() + " ha cerrado la conexión.");
+            }
+        }
+    }
+}*/
+//-----------------------------------------------------------------
+/*public class Servidor implements Runnable { // Funciona pero 1 por una
+	
+	public static final int PORT = 1090;
+
+	public Servidor() {
+		Thread hilo = new Thread(this);
+		hilo.start();
+	}
+
+	public void iniciarServidor() {
+		Thread hilo = new Thread(this);
+		hilo.start();
+	}
+
+	public static void main(String[] args) {
+		Servidor servidor = new Servidor();
+		//servidor.iniciarServidor();
+	}
+
+	@Override
+	public void run() {
+		try {
+			ServerSocket servidor = new ServerSocket(PORT);
+			
+			System.out.println("Esperando peticiones . . .");
+			
+			while (true) {
+				Socket miSocket = servidor.accept();
+				
+				DataInputStream flujoEntrada = new DataInputStream(miSocket.getInputStream());
+				
+				String msgTexto = flujoEntrada.readUTF();
+				
+				System.out.println(msgTexto);
+				
+				miSocket.close();
+			}
+			
+		} catch (Exception e) {
+			System.out.println("[-] " + e.getMessage());
+		}
+	}
+
+}*/
+
+------------------------------------------
+/*
+public class Cliente {
+
+    private static final String HOST = "localhost";
+    private static final int PORT = 1090;
+    private Scanner scanner;
+    private String comandos;
+    private Socket miSocket;
+    private DataOutputStream flujoSalida;
+
+    public Cliente() {
+        comandos = "";
+        scanner = new Scanner(System.in);
+        miSocket = null;
+        flujoSalida = null;
+    }
+
+    public void conectar() {
+        try {
+            miSocket = new Socket(HOST, PORT);
+            flujoSalida = new DataOutputStream(miSocket.getOutputStream());
+        } catch(Exception e) {
+            System.out.println("[-] " + e.getMessage() + " - First start the server");
+        }
+    }
+
+    public void enviarComando() {
+        System.out.print("> ");
+        comandos = scanner.nextLine();
+        try {
+            flujoSalida.writeUTF(comandos);
+            miSocket.close();
+        } catch (Exception e) {
+            System.out.println("[-] " + e.getMessage() + "afs");
+        }
+    }
+
+    public void cerrarConexion() {
+        try {
+            if (flujoSalida != null) {
+                flujoSalida.close();
+            }
+            if (miSocket != null) {
+                miSocket.close();
+            }
+        } catch (Exception e) {
+            System.out.println("[-] " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        Cliente cliente = new Cliente();
+        cliente.conectar();
+        while (true) {
+            cliente.enviarComando();
+        }
+    }
+}*/
