@@ -1,5 +1,6 @@
 package paquete;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
@@ -21,13 +22,26 @@ public class Cliente {
 			Socket miSocket = new Socket(HOST, PORT);
 			
 			DataOutputStream flujoSalida = new DataOutputStream(miSocket.getOutputStream());
+			DataInputStream flujoEntrada = new DataInputStream(miSocket.getInputStream());
 			
-			System.out.print("> ");
-			comandos = scanner.nextLine();
+			while (true) {
+				System.out.print("> ");
+				comandos = scanner.nextLine();
+				
+				flujoSalida.writeUTF(comandos); // Envia el cmd al servidor
+				
+				String respuestaServidor = flujoEntrada.readUTF();
+				System.out.println(respuestaServidor);
+				
+				if (comandos.equalsIgnoreCase("close")) {
+	                break;
+	            }
+			}
 			
-			flujoSalida.writeUTF(comandos);
+			
 			
 			flujoSalida.close();
+			flujoEntrada.close();
 		} catch(Exception e) {
 			System.out.println("[ - ] " + e.getMessage() + " - Servidor no esta en linea");
 		}
