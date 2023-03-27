@@ -28,20 +28,21 @@ public class Cliente {
 				System.out.print("> ");
 				comandos = scanner.nextLine();
 				
-				flujoSalida.writeUTF(comandos); // Envia el cmd al servidor
+				flujoSalida.writeUTF(comandos);
 				
-				String respuestaServidor = flujoEntrada.readUTF();
+				byte[] buffer = new byte[1024];
+				
+				flujoEntrada.read(buffer);
+				
+//				String respuestaServidor = flujoEntrada.readUTF();
+				String respuestaServidor = new String(buffer);
+				
 				System.out.println(respuestaServidor);
 				
-				if (comandos.equalsIgnoreCase("close")) {
-	                break;
-	            }
 			}
-			
-			
-			
-			flujoSalida.close();
-			flujoEntrada.close();
+	
+//			flujoSalida.close();
+//			flujoEntrada.close();
 		} catch(Exception e) {
 			System.out.println("[ - ] " + e.getMessage() + " - Servidor no esta en linea");
 		}
